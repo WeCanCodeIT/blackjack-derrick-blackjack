@@ -1,52 +1,24 @@
 // Suits: ♥ ♠ ♣ ♦
 const {singleDeckGame} = require('blackjack-dealer-logic');
 // const input = require('readline-sync');
+const Dom = require('./utils/Dom');
 
 let isGameRunning = false;
 let instructions = "";
 
-startGame();
+Dom.startGame();
 
 while(isGameRunning) {
-  let playerBet;
-  let playerChips;
-  let dealerBet;
-  let dealerChips;
-  let pot;
-  p(`Your current chip count is ${playerChips} `);
+  renderHands();
+  buildHitButton();
+  buildStayButton();
+  buildDoubleButton();
+
 }
 
-function startGame() {    
-  const startButton = document.getElementById('startGame');
-    startButton.addEventListener('click', () => {
-      console.log('startButton was clicked');
-      isGameRunning = true;
-      startButton.remove();
+  document.getElementById("instructionsText").textContent = instructions; 
 
-      // singleDeckGame.deal();
-      // const userHand = singleDeckGame.getUserHand();
-      // generateCard(userHand.getCards() [0]);
-      // generateCard(userHand.getCards() [1]);
-    createButton("Hit", "hit", "hitButton", document.body);
-    let hitButton = document.getElementById("hitButton");
-    hitButton.addEventListener('click', () => {
-      generateCard(card);
-    });
 
-    // createButton("Stay", "stay", document.body);
-    // createButton("Double", "double", document.body);
-
-    document.getElementById("instructionsText").textContent = instructions; 
-  });
-}
-
-function createButton (buttonLabel, buttonClass, buttonId, buttonDestination) {
-  const genericButton = document.createElement("button");
-  genericButton.textContent = buttonLabel;
-  genericButton.classList.add(buttonClass);
-  genericButton.setAttribute("id", buttonId)
-  buttonDestination.append(genericButton);
-}
 
 function createParagraph (text, paragraphClass, paragraphDestination) {
   const textElement = document.createElement("p");
@@ -60,28 +32,6 @@ function updateChips (player, increment) {
   playerChips.classList.add(increment);
 }
 
-function generateCard(card) {
-  const playingCard = document.createElement('section');
-  playingCard.classList.add('playing-card');
-  
-  const container = document.createElement('section');
-  container.classList.add('container');
-  
-  const value = document.createElement('span');
-  value.classList.add('value');
-  value.textContent = card.getValue();
-  
-  const suit = document.createElement('span');
-  suit.classList.add('suit');
-  suit.textContent = card.getSuit();
-  
-  playingCard.append(container);
-  container.append(value);
-  container.append(suit);  
-
-  const table = document.querySelector(".table");
-  table.append(playingCard)
-}
 
 // const buttons = document.querySelectorAll('.button')
 // buttons.forEach(button => {
