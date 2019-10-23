@@ -1,0 +1,48 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding:0;
+}
+html {
+    --green: darkgreen;
+    --grey: slategrey; 
+    --white: whitesmoke;
+    height: 20rem;
+}
+.wrapper {
+    margin: 0 auto;
+    max-width: 40rem;
+    width: 95%;
+}
+h1 {
+    display: flex;
+    justify-content: center;
+}
+.container {
+    display: flex;    
+    background-color: var(--white);
+    border: 2px solid black;
+    border-radius: .5rem;
+    border-width: 1.5px;
+    width: 100%;
+    text-indent: 4px;
+}
+.game-area {
+    display: flex;
+    justify-content: flex-start;
+    align-items: baseline;   
+}
+.table {
+    background-color: var(--green);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 20rem;
+    width: 40rem;
+}
+.playing-card {
+    display: flex;
+    height: 8rem;
+    width: 5rem;
+    margin: 1rem;
+}
