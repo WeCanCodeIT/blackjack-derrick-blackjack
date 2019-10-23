@@ -1,11 +1,11 @@
 module.exports = {
 
   buildDoubleButton() {
-    createButton("Double", "double", "doubleButton", document.body);
+    this.createButton("Double", "double", "doubleButton", document.querySelector('.buttons-area'));
     },
   
   buildHitButton() {
-    createButton("Hit", "hit", "hitButton", document.body);
+    this.createButton("Hit", "hit", "hitButton", document.querySelector('.buttons-area'));
     let hitButton = document.getElementById("hitButton");
     hitButton.addEventListener('click', () => {
     console.log('hit function...');
@@ -13,15 +13,22 @@ module.exports = {
   },
   
   buildStayButton() {
-    createButton("Stay", "stay", "stayButton", document.body);
+    this.createButton("Stay", "stay", "stayButton", document.querySelector('.buttons-area'));
     },
   
-  createButton (buttonLabel, buttonClass, buttonId, buttonDestination) {
+  createButton(buttonLabel, buttonClass, buttonId, buttonDestination) {
     const genericButton = document.createElement("button");
     genericButton.textContent = buttonLabel;
     genericButton.classList.add(buttonClass);
     genericButton.setAttribute("id", buttonId)
     buttonDestination.append(genericButton);
+    },
+
+  createParagraph(text, paragraphClass, paragraphDestination) {
+    const textElement = document.createElement("p");
+    textElement.textContent = text;
+    textElement.classList.add(paragraphClass);
+    paragraphDestination.append(textElement);
     },
 
   generateCard(card) {
@@ -47,33 +54,20 @@ module.exports = {
     },
   
   renderCards(cardsArray, containerElement) {
-    const table = doc.querySelector('.table')
-    cardsArray.forEach(card => {
-    if (typeof cardsArray !== typeof [] ){
-      //catchFire();
-    } else {
-      // code
-      cardsArray.forEach(card => {
+  cardsArray.forEach(card => {
       containerElement.append(this.generateCard(card));
     })
-    }
-  })
   },
-  
-  renderHands() {
-    const dealerHand = singleDeckGame.getDealerHand();
-    renderCards(dealerHand.getCards(), document.querySelector('.dealer'));
-    const userHand = singleDeckGame.getUserHand();
-    renderCards(userHand.getCards(), document.querySelector('.player'));
-    },
 
   startGame() {    
     const startButton = document.getElementById('startGame');
     startButton.addEventListener('click', () => {
-    console.log('startButton was clicked');
     startButton.remove();
-    singleDeckGame.deal();
-    isGameRunning = true;
     });
-  }
+  },
+
+  updateChips(player, increment) {
+    const playerChips = document.createElement("player-chips");
+    playerChips.classList.add(increment);
+    }
 }
