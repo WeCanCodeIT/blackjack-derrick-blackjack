@@ -38,12 +38,12 @@ h1 {
     align-items: center;
     justify-content: center;
     height: 30rem;
-    width: 40rem;
+    width: 50rem;
 }
 .player{
+    /* display: flex;
+    flex-wrap: wrap; */
     border: 5px, solid black;
-    /* background-color: darkolivegreen; */
-    /* margin: 1rem; */
     padding: 5rem;
 
 }

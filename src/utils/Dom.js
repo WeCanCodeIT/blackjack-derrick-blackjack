@@ -1,28 +1,24 @@
 module.exports = {
-  addButtonEvent(singleDeckGame) {
-    hitButton.addEventListener('click', () => {
-      console.log('Hit functionality:');
-      singleDeckGame.hitUser();
-      this.renderCards(userHand.getCards(), document.querySelector('.player'));
-      console.log("Done");
-    })    
-
-  },
   buildDoubleButton() {
     this.createButton("Double", "double", "doubleButton", document.querySelector('.buttons-area'))
-    console.log("buildDouble...");
-    this.addButtonEvent();  
+    // this.addButtonEvent();  
   },
   
-  buildHitButton() {
+  buildHitButton(singleDeckGame) {
     this.createButton("Hit", "hit", "hitButton", document.querySelector('.buttons-area'));
     let hitButton = document.getElementById("hitButton");
-    console.log("buildHit...")
+    
+    hitButton.addEventListener('click', () => {
+      singleDeckGame.hitUser();
+      // singleDeckGame.evaluateUser();
+      document.querySelector(".player").innerHTML = "";
+      this.renderCards(singleDeckGame.getUserHand().getCards(), document.querySelector('.player'));
+      console.log("Hit function complete");
+    });    
   },
   
   buildStayButton() {
     this.createButton("Stay", "stay", "stayButton", document.querySelector('.buttons-area'))
-    console.log('buildStay...');
     },
   
   createButton(buttonLabel, buttonClass, buttonId, buttonDestination) {
@@ -31,7 +27,7 @@ module.exports = {
     genericButton.classList.add(buttonClass);
     genericButton.setAttribute("id", buttonId)
     buttonDestination.append(genericButton);
-    console.log('building a button: ')
+    console.log('built a button: ')
     },
 
   createParagraph(text, paragraphClass, paragraphDestination) {
@@ -41,19 +37,19 @@ module.exports = {
     paragraphDestination.append(textElement);
     },
 
-  generateCard(card) {
-    const playingCard = document.createElement('section');
-    playingCard.classList.add('playing-card');
+  generateCard(card, singleDeckGame) {
+    const playingCard = document.createElement("section");
+    playingCard.classList.add("playing-card");
     
-    const container = document.createElement('section');
-    container.classList.add('container');
+    const container = document.createElement("section");
+    container.classList.add("container");
     
-    const value = document.createElement('span');
-    value.classList.add('value');
+    const value = document.createElement("span");
+    value.classList.add("value");
     value.textContent = card.getValue();
     
-    const suit = document.createElement('span');
-    suit.classList.add('suit');
+    const suit = document.createElement("span");
+    suit.classList.add("suit");
     suit.textContent = card.getSuit();
     
     playingCard.append(container);
@@ -64,27 +60,28 @@ module.exports = {
     },
 
   initGame(singleDeckGame) {
-    console.log(singleDeckGame);
     console.log("Initializing buttons...");
 
-    this.buildHitButton();
-    this.buildStayButton();
-    this.buildDoubleButton();  
+    this.buildHitButton(singleDeckGame);
+    this.buildStayButton(singleDeckGame);
+    this.buildDoubleButton(singleDeckGame);  
+
     console.log('dealing user and dealer hands...');
-    this.renderCards(singleDeckGame.getUserHand().getCards(), document.querySelector('.player'));
-    this.renderCards(singleDeckGame.getDealerHand().getCards(), document.querySelector('.dealer'));
+    this.renderCards(singleDeckGame.getUserHand().getCards(), document.querySelector('.player'), singleDeckGame);
+    this.renderCards(singleDeckGame.getDealerHand().getCards(), document.querySelector('.dealer'), singleDeckGame);
   },
   
-  renderCards(cardsArray, containerElement) {
+  renderCards(cardsArray, containerElement, singleDeckGame) {
   cardsArray.forEach(card => {
-      containerElement.append(this.generateCard(card));
+    console.log("iterating through cardsArray in renderCards.. appending: " + card)
+      containerElement.append(this.generateCard(card, singleDeckGame));
     })
   },
 
   startGame(singleDeckGame) {    
     console.log(singleDeckGame);
-    const startButton = document.getElementById('startGame');
-    startButton.addEventListener('click', () => {
+    const startButton = document.getElementById("startGame");
+    startButton.addEventListener("click", () => {
     startButton.remove();
     this.initGame(singleDeckGame);
     });
