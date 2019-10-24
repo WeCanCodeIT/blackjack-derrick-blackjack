@@ -42,8 +42,10 @@ h1 {
 }
 .player{
     border: 5px, solid black;
-    background-color: darkolivegreen;
-    margin: 1rem;
+    /* background-color: darkolivegreen; */
+    /* margin: 1rem; */
+    padding: 5rem;
+
 }
 .playing-card {
     display: flex;
