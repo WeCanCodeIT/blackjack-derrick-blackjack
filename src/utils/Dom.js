@@ -1,19 +1,18 @@
 module.exports = {
 
   buildDoubleButton() {
-    this.createButton("Double", "double", "doubleButton", document.querySelector('.buttons-area'));
+    this.createButton("Double", "double", "doubleButton", document.querySelector('.buttons-area'))
+    console.log("buildDouble...");
     },
   
   buildHitButton() {
     this.createButton("Hit", "hit", "hitButton", document.querySelector('.buttons-area'));
-    let hitButton = document.getElementById("hitButton");
-    hitButton.addEventListener('click', () => {
-    console.log('hit function...');
-    })
+    console.log("buildHit...")
   },
   
   buildStayButton() {
-    this.createButton("Stay", "stay", "stayButton", document.querySelector('.buttons-area'));
+    this.createButton("Stay", "stay", "stayButton", document.querySelector('.buttons-area'))
+    console.log('buildStay...');
     },
   
   createButton(buttonLabel, buttonClass, buttonId, buttonDestination) {
@@ -22,6 +21,7 @@ module.exports = {
     genericButton.classList.add(buttonClass);
     genericButton.setAttribute("id", buttonId)
     buttonDestination.append(genericButton);
+    console.log('building a button: ')
     },
 
   createParagraph(text, paragraphClass, paragraphDestination) {
@@ -51,7 +51,15 @@ module.exports = {
     container.append(suit);  
 
     return playingCard;
+    console.log('returned a playing card: ' + playingCard);
     },
+
+  initGame() {
+  
+    this.buildHitButton();
+    this.buildStayButton();
+    this.buildDoubleButton();  
+  },
   
   renderCards(cardsArray, containerElement) {
   cardsArray.forEach(card => {
@@ -63,7 +71,9 @@ module.exports = {
     const startButton = document.getElementById('startGame');
     startButton.addEventListener('click', () => {
     startButton.remove();
-    });
+    this.initGame();
+  });
+
   },
 
   updateChips(player, increment) {

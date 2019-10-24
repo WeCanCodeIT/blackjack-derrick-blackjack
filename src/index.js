@@ -4,25 +4,21 @@
 } = require("blackjack-dealer-logic");
 const Dom = require("./utils/Dom");
 
-let isGameRunning = true;
+singleDeckGame.deal();
+
+const userHand = singleDeckGame.getUserHand();
+const dealerHand = singleDeckGame.getDealerHand();
+
+Dom.renderCards(userHand.getCards(), document.querySelector('.player'));
+Dom.renderCards(dealerHand.getCards(), document.querySelector('.dealer'));
 
 Dom.startGame();
+console.log("Initializing buttons...");
+let hitButton = document.getElementById("hitButton");
+hitButton.addEventListener('click', () => {
+  console.log('Hit functionality:');
+  singleDeckGame.hitUser();
+  console.log("Done");
+})
 
-while(isGameRunning) {
-  console.log('game is running')
-  singleDeckGame.deal();
-
-  Dom.buildHitButton();
-  Dom.buildStayButton();
-  Dom.buildDoubleButton();
-
-  const userHand = singleDeckGame.getUserHand();
-  Dom.generateCard(userHand.getCards()[0]);
-  Dom.generateCard(userHand.getCards()[1]);
-  Dom.renderCards(userHand.getCards(), document.querySelector('.player'));
-
-}
-
-  // document.getElementById("instructionsText").textContent = instructions; 
-
-
+// document.getElementById("instructionsText").textContent = instructions; 
