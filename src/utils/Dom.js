@@ -1,12 +1,22 @@
 module.exports = {
+  addButtonEvent(singleDeckGame) {
+    hitButton.addEventListener('click', () => {
+      console.log('Hit functionality:');
+      singleDeckGame.hitUser();
+      this.renderCards(userHand.getCards(), document.querySelector('.player'));
+      console.log("Done");
+    })    
 
+  },
   buildDoubleButton() {
     this.createButton("Double", "double", "doubleButton", document.querySelector('.buttons-area'))
     console.log("buildDouble...");
-    },
+    this.addButtonEvent();  
+  },
   
   buildHitButton() {
     this.createButton("Hit", "hit", "hitButton", document.querySelector('.buttons-area'));
+    let hitButton = document.getElementById("hitButton");
     console.log("buildHit...")
   },
   
@@ -49,16 +59,20 @@ module.exports = {
     playingCard.append(container);
     container.append(value);
     container.append(suit);  
-
+    console.log('returning a playing card: ' + playingCard);
     return playingCard;
-    console.log('returned a playing card: ' + playingCard);
     },
 
-  initGame() {
-  
+  initGame(singleDeckGame) {
+    console.log(singleDeckGame);
+    console.log("Initializing buttons...");
+
     this.buildHitButton();
     this.buildStayButton();
     this.buildDoubleButton();  
+    console.log('dealing user and dealer hands...');
+    this.renderCards(singleDeckGame.getUserHand().getCards(), document.querySelector('.player'));
+    this.renderCards(singleDeckGame.getDealerHand().getCards(), document.querySelector('.dealer'));
   },
   
   renderCards(cardsArray, containerElement) {
@@ -67,13 +81,13 @@ module.exports = {
     })
   },
 
-  startGame() {    
+  startGame(singleDeckGame) {    
+    console.log(singleDeckGame);
     const startButton = document.getElementById('startGame');
     startButton.addEventListener('click', () => {
     startButton.remove();
-    this.initGame();
-  });
-
+    this.initGame(singleDeckGame);
+    });
   },
 
   updateChips(player, increment) {

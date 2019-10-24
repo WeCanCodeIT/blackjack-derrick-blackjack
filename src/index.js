@@ -6,19 +6,6 @@ const Dom = require("./utils/Dom");
 
 singleDeckGame.deal();
 
-const userHand = singleDeckGame.getUserHand();
-const dealerHand = singleDeckGame.getDealerHand();
-
-Dom.renderCards(userHand.getCards(), document.querySelector('.player'));
-Dom.renderCards(dealerHand.getCards(), document.querySelector('.dealer'));
-
-Dom.startGame();
-console.log("Initializing buttons...");
-let hitButton = document.getElementById("hitButton");
-hitButton.addEventListener('click', () => {
-  console.log('Hit functionality:');
-  singleDeckGame.hitUser();
-  console.log("Done");
-})
+Dom.startGame(singleDeckGame);
 
 // document.getElementById("instructionsText").textContent = instructions; 
