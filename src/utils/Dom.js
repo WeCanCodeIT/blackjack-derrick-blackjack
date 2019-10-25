@@ -27,7 +27,7 @@ module.exports = {
     genericButton.classList.add(buttonClass);
     genericButton.setAttribute("id", buttonId)
     buttonDestination.append(genericButton);
-    console.log('built a button: ')
+    console.log('built a button')
     },
 
   createParagraph(text, paragraphClass, paragraphDestination) {
@@ -60,6 +60,7 @@ module.exports = {
     },
 
   initGame(singleDeckGame) {
+
     console.log("Initializing buttons...");
 
     this.buildHitButton(singleDeckGame);
@@ -87,8 +88,9 @@ module.exports = {
     });
   },
 
-  updateChips(player, increment) {
-    const playerChips = document.createElement("player-chips");
-    playerChips.classList.add(increment);
+  updateChips(singleDeckGame) {
+    singleDeckGame.userChipsTotal = document.querySelector(".player-chips-total")
+    
+    singleDeckGame.userChipsTotal.textContent = singleDeckGame.userChipsTotal;
     }
 }
