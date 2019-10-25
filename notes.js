@@ -5,7 +5,7 @@
 const userChips = document.querySelector(".user-chips");
 const playerAnte = prompt{
     How much do you want to bet?
-    Current chip count: ${singleDeckGame.getUserChips()
+    Current chip count:  ${singleDeckGame.getUserChips()
     }};
 
 userChips.textContent = playerAnte;

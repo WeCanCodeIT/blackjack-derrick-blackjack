@@ -38,14 +38,17 @@ h1 {
     align-items: center;
     justify-content: center;
     height: 30rem;
-    width: 50rem;
+    width: 80rem;
 }
 .player{
-    /* display: flex;
-    flex-wrap: wrap; */
+    display: flex;
+    flex-wrap: wrap;
+    padding: 5rem; 
+}
+.player-cards-view{
+    display: flex;
+    flex-wrap: wrap;
     border: 5px, solid black;
-    padding: 5rem;
-
 }
 .playing-card {
     display: flex;

@@ -11,8 +11,8 @@ module.exports = {
     hitButton.addEventListener('click', () => {
       singleDeckGame.hitUser();
       // singleDeckGame.evaluateUser();
-      document.querySelector(".player").innerHTML = "";
-      this.renderCards(singleDeckGame.getUserHand().getCards(), document.querySelector('.player'));
+      document.querySelector(".player-cards-view").innerHTML = "";
+      this.renderCards(singleDeckGame.getUserHand().getCards(), document.querySelector('.player-cards-view'));
       console.log("Hit function complete");
     });    
   },
@@ -67,7 +67,7 @@ module.exports = {
     this.buildDoubleButton(singleDeckGame);  
 
     console.log('dealing user and dealer hands...');
-    this.renderCards(singleDeckGame.getUserHand().getCards(), document.querySelector('.player'), singleDeckGame);
+    this.renderCards(singleDeckGame.getUserHand().getCards(), document.querySelector('.player-cards-view'), singleDeckGame);
     this.renderCards(singleDeckGame.getDealerHand().getCards(), document.querySelector('.dealer'), singleDeckGame);
   },
   
