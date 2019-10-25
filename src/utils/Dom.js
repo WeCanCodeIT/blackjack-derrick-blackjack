@@ -9,16 +9,16 @@ module.exports = {
     let hitButton = document.getElementById("hitButton");
     
     hitButton.addEventListener('click', () => {
-      singleDeckGame.hitUser();
-      // singleDeckGame.evaluateUser();
-      document.querySelector(".player-cards-view").innerHTML = "";
-      this.renderCards(singleDeckGame.getUserHand().getCards(), document.querySelector('.player-cards-view'));
-      console.log("Hit function complete");
+      this.hitEvent(singleDeckGame);
     });    
   },
   
-  buildStayButton() {
-    this.createButton("Stay", "stay", "stayButton", document.querySelector('.buttons-area'))
+  buildStayButton(singleDeckGame) {
+    this.createButton("Stay", "stay", "stayButton", document.querySelector('.buttons-area'));
+    let stayButton = document.getElementById("stayButton");
+    stayButton.addEventListener("click", () => {
+      this.stayEvent(singleDeckGame);
+    })
     },
   
   createButton(buttonLabel, buttonClass, buttonId, buttonDestination) {
@@ -35,8 +35,8 @@ module.exports = {
     textElement.textContent = text;
     textElement.classList.add(paragraphClass);
     paragraphDestination.append(textElement);
-    },
-
+  },
+  
   generateCard(card, singleDeckGame) {
     const playingCard = document.createElement("section");
     playingCard.classList.add("playing-card");
@@ -57,7 +57,17 @@ module.exports = {
     container.append(suit);  
     console.log('returning a playing card: ' + playingCard);
     return playingCard;
-    },
+  },
+  
+  hitEvent(singleDeckGame) {
+    singleDeckGame.hitUser();
+    singleDeckGame.evaluateUser();
+    document.querySelector(".player-cards-view").innerHTML = "";
+    singleDeckGame.evaluateDealer();
+    this.renderCards(singleDeckGame.getUserHand().getCards(), document.querySelector('.player-cards-view'));
+
+    console.log("Hit function complete");
+  },
 
   initGame(singleDeckGame) {
 
@@ -68,14 +78,32 @@ module.exports = {
     this.buildDoubleButton(singleDeckGame);  
 
     console.log('dealing user and dealer hands...');
-    this.renderCards(singleDeckGame.getUserHand().getCards(), document.querySelector('.player-cards-view'), singleDeckGame);
-    this.renderCards(singleDeckGame.getDealerHand().getCards(), document.querySelector('.dealer'), singleDeckGame);
+
+    this.renderHands([
+      {
+        cards: [singleDeckGame.getDealerHand().getCards()[1]],
+        container: ".dealer"
+      },
+      {
+        cards: singleDeckGame.getUserHand().getCards(),
+        container: ".player-cards-view"
+      }
+    ]);
+  
   },
   
   renderCards(cardsArray, containerElement, singleDeckGame) {
   cardsArray.forEach(card => {
-    console.log("iterating through cardsArray in renderCards.. appending: " + card)
-      containerElement.append(this.generateCard(card, singleDeckGame));
+
+    // console.log("iterating through cardsArray in renderCards.. appending: " + card)
+
+    containerElement.append(this.generateCard(card, singleDeckGame));
+    });
+  },
+
+  renderHands(handArray) {
+    handArray.forEach(hand => {
+      this.renderCards(hand.cards, document.querySelector(hand.container));
     })
   },
 
@@ -88,9 +116,16 @@ module.exports = {
     });
   },
 
-  updateChips(singleDeckGame) {
-    singleDeckGame.userChipsTotal = document.querySelector(".player-chips-total")
-    
-    singleDeckGame.userChipsTotal.textContent = singleDeckGame.userChipsTotal;
-    }
+  stayEvent(singleDeckGame, Result) {
+    singleDeckGame.standUser();
+    singleDeckGame.evaluateUser();
+
+    //disable buttons
+
+    //eval dealer
+    singleDeckGame.evaluateDealer();
+    const dealerContainer = document.querySelector(".dealer");
+    dealerContainer.innerHTML = "";
+    this.renderCards(singleDeckGame.getDealerHand().getCards(), dealerContainer);
+  }
 }
