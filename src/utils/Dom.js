@@ -1,34 +1,51 @@
 module.exports = {
   buildDoubleButton(singleDeckGame, Result) {
     this.createButton("Double", "double", "doubleButton", document.querySelector('.buttons-area'))
-    // this.addButtonEvent();  
+    const doubleButton = document.getElementById("doubleButton");
+    const userChipsText = document.querySelector(".player-chips__bet");
+    doubleButton.addEventListener('click', () => {
+      singleDeckGame.doubleUser();
+      userChipsText.textContent = singleDeckGame.getAnte();
+      this.stayEvent(singleDeckGame, Result);
+    });
   },
   
   buildHitButton(singleDeckGame, Result) {
     this.createButton("Hit", "hit", "hitButton", document.querySelector('.buttons-area'));
     let hitButton = document.getElementById("hitButton");
-    
     hitButton.addEventListener('click', () => {
       this.hitEvent(singleDeckGame);
     });    
   },
   
+  buildRestartButton(singleDeckGame) {
+    const buttonsArea = document.querySelector(".buttons-area");
+    buttonsArea.innerHTML = "";
+    this.createButton("Play again!", "restart", "restartButton", buttonsArea, singleDeckGame);
+    document.body.addEventListener('click', event => {
+      if (event.target.classList.contains("restart")) {
+        singleDeckGame.resetPlayers();
+        this.resetGame(singleDeckGame);
+        // console.log(singleDeckGame.getCards());
+      }
+    });
+  },
+
   buildStayButton(singleDeckGame, Result) {
     this.createButton("Stay", "stay", "stayButton", document.querySelector('.buttons-area'));
     let stayButton = document.getElementById("stayButton");
     stayButton.addEventListener("click", () => {
       this.stayEvent(singleDeckGame, Result);
     })
-    },
+  },
   
-  createButton(buttonLabel, buttonClass, buttonId, buttonDestination) {
+  createButton(buttonLabel, buttonClass, buttonId, buttonDestination, singleDeckGame) {
     const genericButton = document.createElement("button");
     genericButton.textContent = buttonLabel;
     genericButton.classList.add(buttonClass);
     genericButton.setAttribute("id", buttonId)
     buttonDestination.append(genericButton);
-    console.log('built a button')
-    },
+  },
   
   generateCard(card, singleDeckGame) {
     const playingCard = document.createElement("section");
@@ -48,7 +65,6 @@ module.exports = {
     playingCard.append(container);
     container.append(value);
     container.append(suit);  
-    console.log('returning a playing card: ' + playingCard);
     return playingCard;
   },
   
@@ -58,33 +74,20 @@ module.exports = {
     document.querySelector(".player-cards-view").innerHTML = "";
     singleDeckGame.evaluateDealer();
     this.renderCards(singleDeckGame.getUserHand().getCards(), document.querySelector('.player-cards-view'));
-
-    console.log("Hit function complete");
   },
-
+  
   initGame(singleDeckGame, Result) {
-
-    console.log("Initializing buttons...");
-
     this.buildHitButton(singleDeckGame, Result);
     this.buildStayButton(singleDeckGame, Result);
     this.buildDoubleButton(singleDeckGame, Result);  
-
-    console.log('dealing user and dealer hands...');
-
     this.renderHands([
-      {
-        cards: [singleDeckGame.getDealerHand().getCards()[1]],
-        container: ".dealer"
-      },
-      {
-        cards: singleDeckGame.getUserHand().getCards(),
-        container: ".player-cards-view"
-      }
-    ]);
-  
+      { cards: [singleDeckGame.getDealerHand().getCards()[1]],
+        container: ".dealer-cards-view" },
+        { cards: singleDeckGame.getUserHand().getCards(),
+          container: ".player-cards-view" }
+      ]);
   },
-
+      
   initialAnte(singleDeckGame) {
     let userChipsText = document.querySelector('.player-chips__bet');
     let userChipsTotalText = document.querySelector('.player-chips-total');
@@ -93,17 +96,35 @@ module.exports = {
     singleDeckGame.receiveAnte(Number(playerAnte));
     userChipsTotalText.textContent = singleDeckGame.getUserChips();
   },
-
+      
   renderCards(cardsArray, containerElement, singleDeckGame) {
-  cardsArray.forEach(card => {
-    containerElement.append(this.generateCard(card, singleDeckGame));
+    cardsArray.forEach(card => {
+      containerElement.append(this.generateCard(card, singleDeckGame));
     });
   },
-
+      
   renderHands(handArray) {
     handArray.forEach(hand => {
       this.renderCards(hand.cards, document.querySelector(hand.container));
     })
+  },
+      
+  resetGame(singleDeckGame, Result) {
+    // clear all dat shit
+    const dealerArea = document.querySelector(".dealer-cards-view");
+    dealerArea.innerHTML = "";
+    const playerArea = document.querySelector(".player-cards-view");
+    playerArea.innerHTML = "";
+    const resultArea = document.querySelector(".result-container");
+    resultArea.innerHTML = "";
+  
+    // increment (or not) player's chips total
+    this.createButton("Start Game", "button", "startGame", document.querySelector('.buttons-area'), singleDeckGame);
+    singleDeckGame.receiveAnte(singleDeckGame.getAnte());
+    singleDeckGame.resetAnte();
+    singleDeckGame.resetPlayers();
+    this.startGame(singleDeckGame);
+
   },
 
   startGame(singleDeckGame, Result) {    
@@ -122,15 +143,22 @@ module.exports = {
     //disable buttons
     /* derp! */
     
+    // clear player hand, re-render whole hand
+    const playerContainer = document.querySelector(".player-cards-view");
+    playerContainer.innerHTML = "";
+    this.renderCards(singleDeckGame.getUserHand().getCards(), playerContainer);
+
     // clear dealer hand, re-render whole hand
-    const dealerContainer = document.querySelector(".dealer");
+    const dealerContainer = document.querySelector(".dealer-cards-view");
     dealerContainer.innerHTML = "";
     this.renderCards(singleDeckGame.getDealerHand().getCards(), dealerContainer);
 
     singleDeckGame.evaluateDealer();
+    
     const resultContainer = document.querySelector('.result-container')
-
-    //restart button
+    this.buildRestartButton(singleDeckGame);
+    const restartButton = document.querySelector(".restart");
+    resultContainer.append(restartButton);
 
     switch(singleDeckGame.outcome()) {
       case Result.WIN:
