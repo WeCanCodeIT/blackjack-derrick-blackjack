@@ -1,10 +1,10 @@
 module.exports = {
-  buildDoubleButton() {
+  buildDoubleButton(singleDeckGame, Result) {
     this.createButton("Double", "double", "doubleButton", document.querySelector('.buttons-area'))
     // this.addButtonEvent();  
   },
   
-  buildHitButton(singleDeckGame) {
+  buildHitButton(singleDeckGame, Result) {
     this.createButton("Hit", "hit", "hitButton", document.querySelector('.buttons-area'));
     let hitButton = document.getElementById("hitButton");
     
@@ -13,11 +13,11 @@ module.exports = {
     });    
   },
   
-  buildStayButton(singleDeckGame) {
+  buildStayButton(singleDeckGame, Result) {
     this.createButton("Stay", "stay", "stayButton", document.querySelector('.buttons-area'));
     let stayButton = document.getElementById("stayButton");
     stayButton.addEventListener("click", () => {
-      this.stayEvent(singleDeckGame);
+      this.stayEvent(singleDeckGame, Result);
     })
     },
   
@@ -29,13 +29,6 @@ module.exports = {
     buttonDestination.append(genericButton);
     console.log('built a button')
     },
-
-  createParagraph(text, paragraphClass, paragraphDestination) {
-    const textElement = document.createElement("p");
-    textElement.textContent = text;
-    textElement.classList.add(paragraphClass);
-    paragraphDestination.append(textElement);
-  },
   
   generateCard(card, singleDeckGame) {
     const playingCard = document.createElement("section");
@@ -59,7 +52,7 @@ module.exports = {
     return playingCard;
   },
   
-  hitEvent(singleDeckGame) {
+  hitEvent(singleDeckGame, Result) {
     singleDeckGame.hitUser();
     singleDeckGame.evaluateUser();
     document.querySelector(".player-cards-view").innerHTML = "";
@@ -69,13 +62,13 @@ module.exports = {
     console.log("Hit function complete");
   },
 
-  initGame(singleDeckGame) {
+  initGame(singleDeckGame, Result) {
 
     console.log("Initializing buttons...");
 
-    this.buildHitButton(singleDeckGame);
-    this.buildStayButton(singleDeckGame);
-    this.buildDoubleButton(singleDeckGame);  
+    this.buildHitButton(singleDeckGame, Result);
+    this.buildStayButton(singleDeckGame, Result);
+    this.buildDoubleButton(singleDeckGame, Result);  
 
     console.log('dealing user and dealer hands...');
 
@@ -91,12 +84,18 @@ module.exports = {
     ]);
   
   },
-  
+
+  initialAnte(singleDeckGame) {
+    let userChipsText = document.querySelector('.player-chips__bet');
+    let userChipsTotalText = document.querySelector('.player-chips-total');
+    let playerAnte = prompt(`How much do you want to bet? Current chip count: ${singleDeckGame.getUserChips()}`);
+    userChipsText.textContent = playerAnte;
+    singleDeckGame.receiveAnte(Number(playerAnte));
+    userChipsTotalText.textContent = singleDeckGame.getUserChips();
+  },
+
   renderCards(cardsArray, containerElement, singleDeckGame) {
   cardsArray.forEach(card => {
-
-    // console.log("iterating through cardsArray in renderCards.. appending: " + card)
-
     containerElement.append(this.generateCard(card, singleDeckGame));
     });
   },
@@ -107,25 +106,46 @@ module.exports = {
     })
   },
 
-  startGame(singleDeckGame) {    
-    console.log(singleDeckGame);
+  startGame(singleDeckGame, Result) {    
     const startButton = document.getElementById("startGame");
     startButton.addEventListener("click", () => {
     startButton.remove();
-    this.initGame(singleDeckGame);
+    this.initGame(singleDeckGame, Result);
     });
   },
 
   stayEvent(singleDeckGame, Result) {
     singleDeckGame.standUser();
     singleDeckGame.evaluateUser();
+    singleDeckGame.settleDealerHand();
 
     //disable buttons
-
-    //eval dealer
-    singleDeckGame.evaluateDealer();
+    /* derp! */
+    
+    // clear dealer hand, re-render whole hand
     const dealerContainer = document.querySelector(".dealer");
     dealerContainer.innerHTML = "";
     this.renderCards(singleDeckGame.getDealerHand().getCards(), dealerContainer);
-  }
+
+    singleDeckGame.evaluateDealer();
+    const resultContainer = document.querySelector('.result-container')
+
+    //restart button
+
+    switch(singleDeckGame.outcome()) {
+      case Result.WIN:
+        singleDeckGame.userWin();
+        resultContainer.innerHTML += "Winner winner chicken dinner!";
+        break;
+      case Result.LOSS:
+        resultContainer.innerHTML += "Loser loser little snoozer...";
+        break;
+      case Result.PUSH:
+        resultContainer.innerHTML += "You pushed. So try again!";
+        break;
+
+        default:
+          break;
+      }
+    }
 }
