@@ -14,19 +14,18 @@ module.exports = {
     this.createButton("Hit", "hit", "hitButton", document.querySelector('.buttons-area'));
     let hitButton = document.getElementById("hitButton");
     hitButton.addEventListener('click', () => {
-      this.hitEvent(singleDeckGame);
+      this.hitEvent(singleDeckGame, Result);
     });    
   },
   
-  buildRestartButton(singleDeckGame) {
+  buildRestartButton(singleDeckGame, Result) {
     const buttonsArea = document.querySelector(".buttons-area");
     buttonsArea.innerHTML = "";
     this.createButton("Play again!", "restart", "restartButton", buttonsArea, singleDeckGame);
     document.body.addEventListener('click', event => {
       if (event.target.classList.contains("restart")) {
         singleDeckGame.resetPlayers();
-        this.resetGame(singleDeckGame);
-        // console.log(singleDeckGame.getCards());
+        this.resetGame(singleDeckGame, Result);
       }
     });
   },
@@ -77,6 +76,13 @@ module.exports = {
   },
   
   initGame(singleDeckGame, Result) {
+    this.initialAnte(singleDeckGame);
+
+    singleDeckGame.deal();
+    
+    let userChipsTotalText = document.querySelector('.player-chips-total');
+    userChipsTotalText.textContent = singleDeckGame.getUserChips();
+
     this.buildHitButton(singleDeckGame, Result);
     this.buildStayButton(singleDeckGame, Result);
     this.buildDoubleButton(singleDeckGame, Result);  
@@ -87,12 +93,13 @@ module.exports = {
           container: ".player-cards-view" }
       ]);
   },
-      
+    
   initialAnte(singleDeckGame) {
     let userChipsText = document.querySelector('.player-chips__bet');
     let userChipsTotalText = document.querySelector('.player-chips-total');
     let playerAnte = prompt(`How much do you want to bet? Current chip count: ${singleDeckGame.getUserChips()}`);
     userChipsText.textContent = playerAnte;
+    console.log("player ante = " + playerAnte)
     singleDeckGame.receiveAnte(Number(playerAnte));
     userChipsTotalText.textContent = singleDeckGame.getUserChips();
   },
@@ -110,6 +117,11 @@ module.exports = {
   },
       
   resetGame(singleDeckGame, Result) {
+    // increment (or not) player's chips total, reset values....
+    // singleDeckGame.receiveAnte(singleDeckGame.getAnte());
+    // singleDeckGame.resetAnte();
+    // singleDeckGame.resetPlayers();
+    
     // clear all dat shit
     const dealerArea = document.querySelector(".dealer-cards-view");
     dealerArea.innerHTML = "";
@@ -117,14 +129,8 @@ module.exports = {
     playerArea.innerHTML = "";
     const resultArea = document.querySelector(".result-container");
     resultArea.innerHTML = "";
-  
-    // increment (or not) player's chips total
-    this.createButton("Start Game", "button", "startGame", document.querySelector('.buttons-area'), singleDeckGame);
-    singleDeckGame.receiveAnte(singleDeckGame.getAnte());
-    singleDeckGame.resetAnte();
-    singleDeckGame.resetPlayers();
-    this.startGame(singleDeckGame);
-
+    // reset the game
+    this.initGame(singleDeckGame, Result);
   },
 
   startGame(singleDeckGame, Result) {    
@@ -156,7 +162,7 @@ module.exports = {
     singleDeckGame.evaluateDealer();
     
     const resultContainer = document.querySelector('.result-container')
-    this.buildRestartButton(singleDeckGame);
+    this.buildRestartButton(singleDeckGame, Result);
     const restartButton = document.querySelector(".restart");
     resultContainer.append(restartButton);
 
@@ -169,7 +175,7 @@ module.exports = {
         resultContainer.innerHTML += "Loser loser little snoozer...";
         break;
       case Result.PUSH:
-        resultContainer.innerHTML += "You pushed. So try again!";
+        resultContainer.innerHTML += "You pushed...so try again!";
         break;
 
         default:
