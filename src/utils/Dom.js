@@ -73,6 +73,10 @@ module.exports = {
     document.querySelector(".player-cards-view").innerHTML = "";
     singleDeckGame.evaluateDealer();
     this.renderCards(singleDeckGame.getUserHand().getCards(), document.querySelector('.player-cards-view'));
+
+    if (singleDeckGame.isUserBust()) {
+      this.stayEvent(singleDeckGame, Result);
+    }
   },
   
   initGame(singleDeckGame, Result) {
