@@ -1,0 +1,61 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding:0;
+}
+html {
+    --green: darkgreen;
+    --grey: slategrey; 
+    --white: whitesmoke;
+    height: 20rem;
+}
+.wrapper {
+    margin: 0 auto;
+    max-width: 40rem;
+    width: 95%;
+}
+h1 {
+    display: flex;
+    justify-content: center;
+}
+.container {
+    display: flex;    
+    background-color: var(--white);
+    border: 2px solid black;
+    border-radius: .5rem;
+    border-width: 1.5px;
+    width: 100%;
+    text-indent: 4px;
+}
+.game-area {
+    display: flex;
+    justify-content: flex-start;
+    align-items: baseline;   
+}
+.table {
+    background-color: var(--green);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 30rem;
+    width: 120rem;
+}
+.player{
+    display: flex;
+    flex-wrap: wrap;
+    padding: 5rem; 
+}
+.player-cards-view{
+    display: flex;
+    flex-wrap: wrap;
+    border: 5px, solid black;
+}
+.playing-card {
+    display: flex;
+    flex-wrap: wrap;
+    height: 8rem;
+    min-height: 8rem;
+    width: 5rem;
+    min-width: 5rem;
+    margin: 1rem;
+}

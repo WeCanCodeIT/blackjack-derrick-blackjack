@@ -4,16 +4,28 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
+    "@types/readline-sync": "^1.4.3",
+    "blackjack-dealer-logic": "^1.1.4",
+    "eslint-config-prettier": "^6.4.0",
     "jest": "^24.9.0",
     "package.json": "^2.0.1",
+    "playing-card-deck-generator": "^2.0.1",
+    "readline-sync": "^1.4.10",
     "webpack-dev-server": "^3.8.2"
   },
   "devDependencies": {
+    "eslint": "^6.5.1",
+    "eslint-config-standard": "^14.1.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-node": "^10.0.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1",
+    "prettier": "1.18.2",
     "webpack": "^4.41.2",
     "webpack-cli": "^3.3.9"
   },
   "scripts": {
-    "start": "",
+    "start": "webpack-dev-server --mode development --content-base docs/ --open --hot",
     "test": "jest --color --watchAll"
   },
   "repository": {
